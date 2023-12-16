@@ -1,4 +1,11 @@
-import {Alert, Text, View, StyleSheet} from 'react-native';
+import {
+  Alert,
+  Text,
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {useId, useState} from 'react';
 import uuid from 'react-native-uuid';
 import React from 'react';
@@ -27,7 +34,7 @@ export default function TodoListHome({navigation}) {
   };
 
   return (
-    <View style={styles.Container}>
+    <KeyboardAvoidingView behavior="height" style={styles.Container}>
       <Text style={styles.Header}>To-Do list</Text>
 
       <AddTextInput
@@ -44,7 +51,7 @@ export default function TodoListHome({navigation}) {
         setTasks={setTasks}
         setSearch={setSearch}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

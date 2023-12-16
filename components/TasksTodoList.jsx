@@ -12,6 +12,7 @@ import {
   Text,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 export default function TasksTodoList({
@@ -24,6 +25,8 @@ export default function TasksTodoList({
 }) {
   const filteredTasks = tasks.filter(item => item.name.includes(Search));
   const [editInput, setEditInput] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+
   const navigation = useNavigation();
   const handleDelete = item => {
     SetEditIndex(null);
@@ -38,6 +41,7 @@ export default function TasksTodoList({
     const indexToEdit = newTasks.findIndex(task => task.id === item.id);
     if (indexToEdit !== -1) {
       newTasks[indexToEdit].name = editInput;
+      newTasks[indexToEdit].description = editDescription;
       setTasks(newTasks);
       SetEditIndex(null);
       setEditInput('');
@@ -48,6 +52,8 @@ export default function TasksTodoList({
   const handleEdit = item => {
     console.log(item.name);
     SetEditIndex(item.id);
+    setEditDescription(item.description);
+    setEditInput(item.name);
   };
   const handleDetail = item => {
     navigation.navigate('TaskDescription', {item});
@@ -63,7 +69,7 @@ export default function TasksTodoList({
     }
   };
   return (
-    <View style={styles.TodoListContainer}>
+    <KeyboardAvoidingView behavior="height" style={styles.TodoListContainer}>
       <FlatList
         style={styles.TodoList}
         data={filteredTasks}
@@ -71,11 +77,20 @@ export default function TasksTodoList({
         renderItem={({item}) => (
           <View style={styles.Entry} key={item.id}>
             {EditIndex === item.id ? (
-              <TextInput
-                style={styles.TextInput}
-                onChangeText={text => setEditInput(text)}
-                defaultValue=""
-              />
+              <View>
+                <Text>Name:</Text>
+                <TextInput
+                  style={styles.TextInput}
+                  onChangeText={text => setEditInput(text)}
+                  defaultValue={item.name}
+                />
+                <Text>Description:</Text>
+                <TextInput
+                  style={styles.TextInput}
+                  onChangeText={text => setEditDescription(text)}
+                  defaultValue={item.description}
+                />
+              </View>
             ) : (
               <Text style={styles.Task}>{item.name}</Text>
             )}
@@ -112,7 +127,7 @@ export default function TasksTodoList({
           </View>
         )}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
